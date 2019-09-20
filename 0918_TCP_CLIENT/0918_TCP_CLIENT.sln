@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "0918_TCP_CLIENT", "0918_TCP
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "0919_UDP_Client", "0919_UDP_Client\0919_UDP_Client.vcxproj", "{B96B3ADB-8A3E-43D8-846F-6FEA1679B0D4}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "0920_TCP_Practice", "0920_TCP_Practice\0920_TCP_Practice.vcxproj", "{96E64D6B-6DEC-4E3E-81B6-44C1B3E39D2E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -31,6 +33,14 @@ Global
 		{B96B3ADB-8A3E-43D8-846F-6FEA1679B0D4}.Release|x64.Build.0 = Release|x64
 		{B96B3ADB-8A3E-43D8-846F-6FEA1679B0D4}.Release|x86.ActiveCfg = Release|Win32
 		{B96B3ADB-8A3E-43D8-846F-6FEA1679B0D4}.Release|x86.Build.0 = Release|Win32
+		{96E64D6B-6DEC-4E3E-81B6-44C1B3E39D2E}.Debug|x64.ActiveCfg = Debug|x64
+		{96E64D6B-6DEC-4E3E-81B6-44C1B3E39D2E}.Debug|x64.Build.0 = Debug|x64
+		{96E64D6B-6DEC-4E3E-81B6-44C1B3E39D2E}.Debug|x86.ActiveCfg = Debug|Win32
+		{96E64D6B-6DEC-4E3E-81B6-44C1B3E39D2E}.Debug|x86.Build.0 = Debug|Win32
+		{96E64D6B-6DEC-4E3E-81B6-44C1B3E39D2E}.Release|x64.ActiveCfg = Release|x64
+		{96E64D6B-6DEC-4E3E-81B6-44C1B3E39D2E}.Release|x64.Build.0 = Release|x64
+		{96E64D6B-6DEC-4E3E-81B6-44C1B3E39D2E}.Release|x86.ActiveCfg = Release|Win32
+		{96E64D6B-6DEC-4E3E-81B6-44C1B3E39D2E}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
