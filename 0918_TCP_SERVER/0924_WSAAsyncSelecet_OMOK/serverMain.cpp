@@ -1,5 +1,5 @@
 #include <WinSock2.h>
-#include <Windows.h>
+#include <windows.h>
 #include <iostream>
 #include <map>
 #include "..\..\Common\PACKET_HEADER_OMOK.h"
@@ -14,7 +14,7 @@ public:
 	int index;
 	char szBuf[BUFSIZE];
 	int len;
-	WHAT_BLOCK_STATE stone;
+	int stone;
 };
 
 int g_iIndex = 0;
@@ -24,7 +24,7 @@ LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 void ProcessSocketMessage(HWND, UINT, WPARAM, LPARAM);
 bool ProcessPacket(SOCKET sock, USER_INFO* pUser, char* szBuf, int& len);
 void err_display(int errcode);
-void err_display(char* szMsg);
+void err_display(const char* szMsg);
 
 int main(int argc, char* argv[])
 {
@@ -166,22 +166,23 @@ void ProcessSocketMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 		Sleep(500);
 
-		PACKET_USER_DATA user_packet;
+		PACKET_USER_DATA_H user_packet;
 		user_packet.header.wIndex = PACKET_INDEX_USER_DATA;
-		user_packet.header.wLen = sizeof(PACKET_HEADER) + sizeof(WORD) + sizeof(USER_DATA) * g_mapUser.size();
+		user_packet.header.wLen = sizeof(PACKET_HEADER) + sizeof(WORD) + sizeof(USER_DATA_H) * g_mapUser.size();
 		user_packet.wCount = g_mapUser.size();
 		int i = 0;
 		for (auto iter = g_mapUser.begin(); iter != g_mapUser.end(); iter++, i++)
 		{
 			user_packet.data[i].iIndex = iter->second->index;
-			user_packet.data[i].wX = iter->second->x;
-			user_packet.data[i].wY = iter->second->y;
+			user_packet.data[i].stone = iter->second->stone;
 		}
 
+	
 		for (auto iter = g_mapUser.begin(); iter != g_mapUser.end(); iter++, i++)
 		{
 			send(iter->first, (const char*)&user_packet, user_packet.header.wLen, 0);
 		}
+
 	}
 	break;
 	case FD_READ:
@@ -247,8 +248,8 @@ bool ProcessPacket(SOCKET sock, USER_INFO* pUser, char* szBuf, int& len)
 		PACKET_SEND_POS packet;
 		memcpy(&packet, szBuf, header.wLen);
 
-		g_mapUser[sock]->x = packet.data.wX;
-		g_mapUser[sock]->y = packet.data.wY;
+		//g_mapUser[sock]->x = packet.data.wX;
+		//g_mapUser[sock]->y = packet.data.wY;
 
 		for (auto iter = g_mapUser.begin(); iter != g_mapUser.end(); iter++)
 		{

@@ -1,7 +1,5 @@
 #pragma once
-#include <Windows.h>
-#include <chrono>
-using namespace std;
+#include"Global.h"
 
 
 enum STATE
@@ -11,16 +9,26 @@ enum STATE
 	JUMP
 };
 
+class Player
+{
+public:
+	int x;
+	int y;
+	WHAT_BLOCK_STATE stone;
+};
+
 class GameFrameWork
 {
 private:
+	//네트워크
+	int			m_iIndex;
+	map<int, Player*> m_mapPlayer;
+	SOCKET		m_socket;
+
+	//클라
 	HWND		m_hWnd;
 	chrono::system_clock::time_point m_LastTime;
 	float		m_fElapseTime;
-
-	HDC			m_hMemDC[3];
-	HBITMAP		m_hBitmap[3];	//0 Back 1 BackGround 2 char
-	HBITMAP		m_hOld[3];
 
 	float		Player_x;
 	float		Player_y;
@@ -39,11 +47,12 @@ public:
 	GameFrameWork();
 	~GameFrameWork();
 
-	void Init(HWND hWnd);
+	void Init(HWND hWnd ,SOCKET _sock);
 	void Release();
 	void Update();
 	void OperateInput();
 	void Render();
-	
+	void ProcessSocketMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+	void ProcessPacket(char* szBuf, int len);
 };
 

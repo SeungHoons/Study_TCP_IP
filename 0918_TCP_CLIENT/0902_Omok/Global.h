@@ -1,16 +1,18 @@
 #pragma once
 
 // window h
-#include <Windows.h>
+#include <WinSock2.h>
+#include <windows.h>
 #include <vector>
 #include <chrono>
+#include <map>
 
 using namespace std;
 
 
 //my header
 #include "macro.h"
-#include "..\..\Common\PACKET_HEADER.h"
+#include "..\..\Common\PACKET_HEADER_OMOK.h"
 
 //define
 #define FPS 60.0f
@@ -20,6 +22,8 @@ using namespace std;
 #define STONE_SIZE 30
 
 
+//통신관련 디파인
+#define BUFSIZE 512
 
 struct F_POSITION
 {

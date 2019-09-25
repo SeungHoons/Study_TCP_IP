@@ -15,12 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Common\PACKET_HEADER_OMOK.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Sever_main.cpp">
+    <ClCompile Include="serverMain.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

@@ -20,7 +20,10 @@ struct USER_DATA
 	int iIndex;
 	WORD wX;
 	WORD wY;
+	int stone;
 };
+
+
 
 struct PACKET_LOGIN_RET
 {
@@ -40,6 +43,24 @@ struct PACKET_SEND_POS
 	PACKET_HEADER header;
 	USER_DATA data;
 };
+
+
+//////////////내ㅑ가 만든거
+
+struct USER_DATA_H
+{
+	int iIndex;
+	int stone;
+};
+
+struct PACKET_USER_DATA_H
+{
+	PACKET_HEADER header;
+	WORD wCount;
+	USER_DATA_H data[20];
+};
+
+
 
 
 #pragma pack()

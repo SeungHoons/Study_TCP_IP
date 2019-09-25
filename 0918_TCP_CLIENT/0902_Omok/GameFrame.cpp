@@ -1,11 +1,18 @@
-#include <Windows.h>
 #include "GameFrameWork.h"
+using namespace std;
+
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
+
 HINSTANCE g_hInst;
 HWND hWnd;
 LPCTSTR lpszClass = TEXT("Hello World!!");
 GameFrameWork g_GameFrame;
+
+
+#define WM_SOCKET (WM_USER+1)
+SOCKET g_sock;
+
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdParam, int nCmdShow)
 {
@@ -29,7 +36,36 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 		CW_USEDEFAULT, CW_USEDEFAULT, NULL, (HMENU)NULL, hInstance, NULL);
 	ShowWindow(hWnd, nCmdShow);
 
-	g_GameFrame.Init(hWnd);
+	WSADATA wsa;
+	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
+		return -1;
+
+	g_sock = socket(AF_INET, SOCK_STREAM, 0);
+	if (g_sock == INVALID_SOCKET)
+	{
+		//cout << "err on socket" << endl;
+		return -1;
+	}
+
+	g_GameFrame.Init(hWnd, g_sock);
+
+	SOCKADDR_IN serveraddr;
+	ZeroMemory(&serveraddr, sizeof(serveraddr));
+	serveraddr.sin_family = AF_INET;
+	serveraddr.sin_port = htons(9000);
+	serveraddr.sin_addr.s_addr = inet_addr("127.0.0.1");
+	int retval = connect(g_sock, (sockaddr*)&serveraddr, sizeof(serveraddr));
+	if (retval == SOCKET_ERROR)
+	{
+		//cout << "err on connect" << endl;
+		return -1;
+	}
+
+	retval = WSAAsyncSelect(g_sock, hWnd, WM_SOCKET, FD_READ | FD_CLOSE);
+	if (retval == SOCKET_ERROR)
+	{
+		return -1;
+	}
 
 	while (true)
 	{
@@ -50,6 +86,9 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 
 	g_GameFrame.Release();
 
+	closesocket(g_sock);
+	WSACleanup();
+
 	return (int)Message.wParam;
 }
 
@@ -57,6 +96,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
 	switch (iMessage)
 	{
+	case WM_SOCKET:
+		g_GameFrame.ProcessSocketMessage(hWnd, iMessage, wParam, lParam);
+		return 0;
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		return 0;
