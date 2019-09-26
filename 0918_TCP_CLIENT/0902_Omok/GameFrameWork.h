@@ -9,20 +9,12 @@ enum STATE
 	JUMP
 };
 
-class Player
-{
-public:
-	int x;
-	int y;
-	WHAT_BLOCK_STATE stone;
-};
+
 
 class GameFrameWork
 {
 private:
 	//네트워크
-	int			m_iIndex;
-	map<int, Player*> m_mapPlayer;
 	SOCKET		m_socket;
 
 	//클라

@@ -21,11 +21,11 @@ void GameFrameWork::Init(HWND hWnd, SOCKET _sock)
 
 	//네트워크
 	m_socket = _sock;
-	m_iIndex = 0;
 
-	//ResManager::getInst()->init(hdc);
+
+	ResManager::getInst()->init(hdc);
 	//씬매니저 초기화
-	//SceneManager::getSingleton()->init(hdc, m_hWnd);
+	SceneManager::getSingleton()->init(hdc, m_hWnd, _sock);
 
 	ReleaseDC(hWnd, hdc);
 }
@@ -56,7 +56,7 @@ void GameFrameWork::Update()
 	m_fElapseTime = sec.count();
 	m_LastTime = std::chrono::system_clock::now();
 
-	//SceneManager::getSingleton()->update();
+	SceneManager::getSingleton()->update();
 
 	OperateInput();
 
@@ -100,7 +100,7 @@ void GameFrameWork::Render()
 {
 	HDC hdc = GetDC(m_hWnd);
 
-	//SceneManager::getSingleton()->render(hdc);
+	SceneManager::getSingleton()->render(hdc);
 
 	ReleaseDC(m_hWnd, hdc);
 }
@@ -146,48 +146,51 @@ void GameFrameWork::ProcessSocketMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LP
 
 void GameFrameWork::ProcessPacket(char * szBuf, int len)
 {
-	PACKET_HEADER header;
+	SceneManager::getSingleton()->ProcessPacket(szBuf, len);
 
-	memcpy(&header, szBuf, sizeof(header));
 
-	switch (header.wIndex)
-	{
-	case PACKET_INDEX_LOGIN_RET:
-	{
-		PACKET_LOGIN_RET packet;
-		memcpy(&packet, szBuf, header.wLen);
+	//PACKET_HEADER header;
 
-		m_iIndex = packet.iIndex;
-	}
-	break;
-	case PACKET_INDEX_USER_DATA:
-	{
-		PACKET_USER_DATA_H packet;
-		memcpy(&packet, szBuf, header.wLen);
+	//memcpy(&header, szBuf, sizeof(header));
 
-		for (auto iter = m_mapPlayer.begin(); iter != m_mapPlayer.end(); iter++)
-		{
-			delete iter->second;
-		}
-		m_mapPlayer.clear();
+	//switch (header.wIndex)
+	//{
+	//case PACKET_INDEX_LOGIN_RET:
+	//{
+	//	PACKET_LOGIN_RET packet;
+	//	memcpy(&packet, szBuf, header.wLen);
 
-		for (int i = 0; i < packet.wCount; i++)
-		{
-			Player* pNew = new Player();
-			int a = packet.data[i].iIndex;
-			pNew->stone = (WHAT_BLOCK_STATE)packet.data[i].stone;
-			m_mapPlayer.insert(make_pair(packet.data[i].iIndex, pNew));
-		}
-	}
-	break;
-	case PACKET_INDEX_SEND_POS:
-	{
-		PACKET_SEND_POS packet;
-		memcpy(&packet, szBuf, header.wLen);
+	//	m_iIndex = packet.iIndex;
+	//}
+	//break;
+	//case PACKET_INDEX_USER_DATA:
+	//{
+	//	PACKET_USER_DATA_H packet;
+	//	memcpy(&packet, szBuf, header.wLen);
 
-		//m_mapPlayer[packet.data.iIndex]->x = packet.data.wX;
-		//m_mapPlayer[packet.data.iIndex]->y = packet.data.wY;
-	}
-	break;
-	}
+	//	for (auto iter = m_mapPlayer.begin(); iter != m_mapPlayer.end(); iter++)
+	//	{
+	//		delete iter->second;
+	//	}
+	//	m_mapPlayer.clear();
+
+	//	for (int i = 0; i < packet.wCount; i++)
+	//	{
+	//		Player* pNew = new Player();
+	//		int a = packet.data[i].iIndex;
+	//		pNew->stone = (WHAT_BLOCK_STATE)packet.data[i].stone;
+	//		m_mapPlayer.insert(make_pair(packet.data[i].iIndex, pNew));
+	//	}
+	//}
+	//break;
+	//case PACKET_INDEX_SEND_POS:
+	//{
+	//	PACKET_SEND_POS packet;
+	//	memcpy(&packet, szBuf, header.wLen);
+
+	//	//m_mapPlayer[packet.data.iIndex]->x = packet.data.wX;
+	//	//m_mapPlayer[packet.data.iIndex]->y = packet.data.wY;
+	//}
+	//break;
+	//}
 }

@@ -21,6 +21,7 @@ struct USER_DATA
 	WORD wX;
 	WORD wY;
 	int stone;
+	//int roomNum;
 };
 
 
@@ -74,8 +75,9 @@ struct PACKET_USER_DATA_H
 //ÀÌ³Ñ
 enum SCENE_STATE
 {
-	SCENE_MENU,
-	SCENE_STAGE_ONE
+	SCENE_LOGIN,
+	SCENE_LOBBY,
+	SCENE_GAME_ROOM
 };
 
 enum WHAT_BLOCK_STATE

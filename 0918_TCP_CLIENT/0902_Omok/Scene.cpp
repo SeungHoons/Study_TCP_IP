@@ -11,7 +11,7 @@ Scene::~Scene()
 {
 }
 
-void Scene::init(HDC _hdc, HWND _hWnd)
+void Scene::init(HDC _hdc, HWND _hWnd, SOCKET _sock)
 {
 }
 

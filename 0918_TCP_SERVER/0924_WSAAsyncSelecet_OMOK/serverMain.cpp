@@ -1,8 +1,9 @@
 #include <WinSock2.h>
-#include <windows.h>
+#include <Windows.h>
 #include <iostream>
 #include <map>
 #include "..\..\Common\PACKET_HEADER_OMOK.h"
+#include "BlockManager.h"
 using namespace std;
 
 #define BUFSIZE 512
@@ -15,10 +16,12 @@ public:
 	char szBuf[BUFSIZE];
 	int len;
 	int stone;
+	int roomNum;
 };
 
 int g_iIndex = 0;
 map<SOCKET, USER_INFO*> g_mapUser;
+map<int, BlockManager*> g_BlockManager;
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 void ProcessSocketMessage(HWND, UINT, WPARAM, LPARAM);
@@ -89,6 +92,10 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 
+	//test 1방에만	//접속/접속인원에 따라 입장/ 방늘려줘야함
+	g_BlockManager.insert(make_pair(0, new BlockManager));
+	g_BlockManager[0]->init();
+
 	MSG msg;
 	while (GetMessage(&msg, NULL, 0, 0))
 	{
@@ -120,6 +127,7 @@ void ProcessSocketMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	SOCKADDR_IN clientaddr;
 	int addrlen = 0;
 	int retval = 0;
+
 
 
 	if (WSAGETSELECTERROR(lParam))
@@ -156,6 +164,8 @@ void ProcessSocketMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		pInfo->index = g_iIndex++;
 		pInfo->len = 0;
 		pInfo->stone = (WHAT_BLOCK_STATE)(pInfo->index % 2);
+		//방 번호 카운트로 체크해서 늘려주기
+		pInfo->roomNum = 0;
 		g_mapUser.insert(make_pair(client_sock, pInfo));
 
 		PACKET_LOGIN_RET packet;
@@ -176,7 +186,6 @@ void ProcessSocketMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			user_packet.data[i].iIndex = iter->second->index;
 			user_packet.data[i].stone = iter->second->stone;
 		}
-
 	
 		for (auto iter = g_mapUser.begin(); iter != g_mapUser.end(); iter++, i++)
 		{
@@ -248,8 +257,11 @@ bool ProcessPacket(SOCKET sock, USER_INFO* pUser, char* szBuf, int& len)
 		PACKET_SEND_POS packet;
 		memcpy(&packet, szBuf, header.wLen);
 
-		//g_mapUser[sock]->x = packet.data.wX;
-		//g_mapUser[sock]->y = packet.data.wY;
+
+		//g_mapUser[sock]->roomNum = packet.data.wX;
+		//g_mapUser[sock]->roomNum = packet.data.wY;
+
+		g_BlockManager[g_mapUser[sock]->roomNum]->setStone(packet.data.wY, packet.data.wX, (WHAT_BLOCK_STATE)g_mapUser[sock]->stone);
 
 		for (auto iter = g_mapUser.begin(); iter != g_mapUser.end(); iter++)
 		{

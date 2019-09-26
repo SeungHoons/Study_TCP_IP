@@ -7,7 +7,7 @@ public:
 	Scene();
 	~Scene();
 
-	virtual void init(HDC _hdc, HWND _hWnd);
+	virtual void init(HDC _hdc, HWND _hWnd, SOCKET _sock);
 	virtual void input(UINT _iMessage, WPARAM _wParam);
 	virtual void update();
 	virtual void render(HDC _hdc);

@@ -2,6 +2,7 @@
 #include "Block.h"
 #include "ResManager.h"
 #include "BitMap.h"
+#include "SceneManager.h"
 
 BlockManager::BlockManager()
 {
@@ -68,12 +69,7 @@ void BlockManager::checkCollition(POINT _pt)
 				if (m_pBlock[i][j]->isEmpty())
 				{
 					m_pBlock[i][j]->setStone(m_nowPlayer);
-					checkFiveStone(i, j);
-
-					if (m_nowPlayer == BLACK_STONE)
-						m_nowPlayer = WHITE_STONE;
-					else
-						m_nowPlayer = BLACK_STONE;
+					sendPos(i, j);
 				}
 			}
 		}
@@ -163,4 +159,27 @@ bool BlockManager::checkFiveAndResetCount(int& _num)
 	}
 	_num = 1;
 	return false;
+}
+
+void BlockManager::sendPos(int _y, int _x)
+{
+	PACKET_SEND_POS packet;
+	packet.header.wIndex = PACKET_INDEX_SEND_POS;
+	packet.header.wLen = sizeof(packet);
+	packet.data.iIndex = SceneManager::getSingleton()->getMyIndex();
+	packet.data.wX = _x;
+	packet.data.wY = _y;
+	//packet.data.wX = m_mapPlayer[packet.data.iIndex]->x;
+	//packet.data.wY = m_mapPlayer[packet.data.iIndex]->y;
+	send(SceneManager::getSingleton()->getSock(), (const char*)&packet, sizeof(packet), 0);
+}
+
+void BlockManager::recvPos(int _y, int _x, int _stone)
+{
+	m_pBlock[_y][_x]->setStone((WHAT_BLOCK_STATE)_stone);
+}
+
+void BlockManager::setStone(WHAT_BLOCK_STATE _stone)
+{
+	m_nowPlayer = _stone;
 }

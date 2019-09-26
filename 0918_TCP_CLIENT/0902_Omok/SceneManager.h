@@ -3,9 +3,21 @@
 #include "SingletoneBase.h"
 
 class Scene;
+class Player
+{
+public:
+	int x;
+	int y;
+	WHAT_BLOCK_STATE stone;
+};
 class SceneManager : public singletonBase<SceneManager>
 {
 private:
+	//네트워크
+	int			m_iIndex;
+	map<int, Player*> m_mapPlayer;
+	SOCKET m_sock;
+
 	HDC m_resouceMemDC;
 	HWND m_hWnd;
 	Scene* m_pNowScene;
@@ -18,13 +30,20 @@ public:
 	SceneManager();
 	~SceneManager();
 
-	void init(HDC _hdc, HWND _hWnd);
+	void init(HDC _hdc, HWND _hWnd, SOCKET _sock);
 	void update();
 	void render(HDC _hdc);
 	void input(UINT _iMessage, WPARAM _wParam);
 
 	void freeInst();
 	void sceneChange(SCENE_STATE _state);
+
+	void ProcessPacket(char * szBuf, int len);
+	void sendPos();
+
+	int getMyIndex() { return m_iIndex; }
+	SOCKET getSock() { return m_sock; }
+
 
 	inline void nextSceneChange(SCENE_STATE _state) // 씬 변경 예약함수
 	{ 

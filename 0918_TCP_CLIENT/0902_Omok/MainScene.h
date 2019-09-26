@@ -6,6 +6,9 @@ class MainScene :
 	public Scene
 {
 private:
+	//SOCK
+	SOCKET m_sock;
+
 	bool m_clicked;
 	HWND m_hWnd;
 	HDC				m_backBuffer;
@@ -17,10 +20,14 @@ public:
 	MainScene();
 	~MainScene();
 
-	virtual void init(HDC _hdc, HWND _hWnd);
+	virtual void init(HDC _hdc, HWND _hWnd, SOCKET _sock);
 	virtual void input(UINT _iMessage, WPARAM _wParam);
 	virtual void update();
 	virtual void render(HDC _hdc);
 	virtual void release();
+
+	void recvPos(int _y, int _x, int _stone);
+
+	BlockManager* getBlockMG() { return m_pBlockManager; }
 };
 

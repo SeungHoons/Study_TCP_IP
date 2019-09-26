@@ -12,9 +12,10 @@ MainScene::~MainScene()
 }
 
 
-void MainScene::init(HDC _hdc, HWND _hWnd)
+void MainScene::init(HDC _hdc, HWND _hWnd , SOCKET _sock)
 {
 	m_hWnd = _hWnd;
+	m_sock = _sock;
 	m_pBlockManager = new BlockManager();
 	m_pBlockManager->init();
 	m_backBuffer = CreateCompatibleDC(_hdc);
@@ -61,4 +62,11 @@ void MainScene::release()
 	DeleteObject(m_hBitmap);
 	DeleteDC(m_backBuffer);
 }
+
+void MainScene::recvPos(int _y, int _x, int _stone)
+{
+	m_pBlockManager->recvPos(_y, _x, _stone);
+}
+
+
 
