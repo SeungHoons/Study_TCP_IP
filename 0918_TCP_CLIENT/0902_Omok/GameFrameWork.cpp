@@ -135,6 +135,29 @@ void GameFrameWork::ProcessSocketMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LP
 			}
 		}
 
+		if (retval > 0)
+		{
+			memcpy(&m_byteStream.szBuf[m_byteStream.len], szBuf, retval);
+			m_byteStream.len += retval;
+			retval = 0;
+		}
+
+		if (m_byteStream.len < sizeof(PACKET_HEADER))
+		{
+			//return false;
+		}
+		else
+		{
+
+		}
+
+		PACKET_HEADER header;
+		memcpy(&header, pUser->szBuf, sizeof(header));
+
+		if (pUser->len < header.wLen)
+			return false;
+
+
 		ProcessPacket(szBuf, retval);
 	}
 	break;
@@ -148,6 +171,9 @@ void GameFrameWork::ProcessPacket(char * szBuf, int len)
 {
 	SceneManager::getSingleton()->ProcessPacket(szBuf, len);
 
+
+	memcpy(&pUser->szBuf, &pUser->szBuf[header.wLen], pUser->len - header.wLen);
+	pUser->len -= header.wLen;
 
 	//PACKET_HEADER header;
 

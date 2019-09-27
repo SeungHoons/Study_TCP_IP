@@ -28,9 +28,9 @@ void BlockManager::update()
 }
 
 
-void BlockManager::checkFiveStone(int _y, int _x)
+int BlockManager::checkFiveStone(int _y, int _x, int _stone)
 {
-	int count = 1;
+	int count = 0;
 	int x = _x;
 	int y = _y;
 
@@ -39,16 +39,17 @@ void BlockManager::checkFiveStone(int _y, int _x)
 	{
 		x = _x;
 		y = _y;
+		count = 0;
 		int plus_x = (DIRECTION_EIGHT[(LINE_DIR)i].x);
 		int plus_y = (DIRECTION_EIGHT[(LINE_DIR)i].y);
-		while (y>0 && x > 0 && (m_pBlock[y + plus_y][x + plus_x]->state == m_nowPlayer))
+		while (y>0 && x > 0 && (m_pBlock[y + plus_y][x + plus_x]->state == _stone))
 		{
 			x += plus_x;
 			y += plus_y;
 		}
 		plus_x = (DIRECTION_EIGHT[(LINE_DIR)i+1].x);
 		plus_y = (DIRECTION_EIGHT[(LINE_DIR)i+1].y);
-		while ((m_pBlock[y][x]->state == m_nowPlayer && x < 18 && y < 18  ))
+		while ((m_pBlock[y][x]->state == _stone && x < 18 && y < 18  ))
 		{
 			y += plus_y;
 			x += plus_x;
@@ -57,10 +58,12 @@ void BlockManager::checkFiveStone(int _y, int _x)
 		//5°³ Ã¼Å©
 		if (checkFiveAndResetCount(count))
 		{
-			//winPlayer()
+			return _stone;
 			break;
 		}
 	}
+
+	return BLOCK_EMPTY;
 }
 
 bool BlockManager::checkFiveAndResetCount(int& _num)
@@ -73,8 +76,9 @@ bool BlockManager::checkFiveAndResetCount(int& _num)
 	return false;
 }
 
-void BlockManager::setStone(int _y, int _x, WHAT_BLOCK_STATE _stone)
+int BlockManager::setStone(int _y, int _x, WHAT_BLOCK_STATE _stone)
 {
 	m_pBlock[_y][_x]->state = _stone;
-	checkFiveStone(_y, _x);
+	return checkFiveStone(_y, _x, _stone);
 }
+

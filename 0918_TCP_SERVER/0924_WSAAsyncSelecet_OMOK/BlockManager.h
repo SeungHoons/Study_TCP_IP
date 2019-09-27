@@ -26,10 +26,9 @@ public:
 	void init();
 	void update();
 
-	void checkFiveStone(int _y, int _x);
+	int checkFiveStone(int _y, int _x, int _stone);
 	bool checkFiveAndResetCount(int& _num);
-	void setStone(int _y, int _x, WHAT_BLOCK_STATE _stone);
-	//void winPlayer();
+	int setStone(int _y, int _x, WHAT_BLOCK_STATE _stone);
 	
 
 };

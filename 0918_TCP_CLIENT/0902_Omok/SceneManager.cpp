@@ -115,7 +115,7 @@ void SceneManager::ProcessPacket(char * szBuf, int len)
 			m_mapPlayer.insert(make_pair(packet.data[i].iIndex, pNew));
 
 		}
-		//((MainScene*)m_pNowScene)->getBlockMG()->setStone(m_mapPlayer[m_iIndex]->stone);
+		((MainScene*)m_pNowScene)->getBlockMG()->setStone(m_mapPlayer[m_iIndex]->stone);
 	}
 	break;
 	case PACKET_INDEX_SEND_POS:
@@ -124,9 +124,12 @@ void SceneManager::ProcessPacket(char * szBuf, int len)
 		memcpy(&packet, szBuf, header.wLen);
 
 		((MainScene*)m_pNowScene)->recvPos(
-			m_mapPlayer[packet.data.iIndex]->y,
-			m_mapPlayer[packet.data.iIndex]->x,
+			packet.data.wY,
+			packet.data.wX,
 			m_mapPlayer[packet.data.iIndex]->stone
+			/*m_mapPlayer[packet.data.iIndex]->y,
+			m_mapPlayer[packet.data.iIndex]->x,
+			m_mapPlayer[packet.data.iIndex]->stone*/
 		);
 
 		//m_mapPlayer[packet.data.iIndex]->x = packet.data.wX;

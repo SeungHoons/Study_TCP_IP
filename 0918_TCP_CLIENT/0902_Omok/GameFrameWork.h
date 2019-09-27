@@ -9,13 +9,19 @@ enum STATE
 	JUMP
 };
 
-
+struct SERVER_INFO
+{
+	int len;
+	char szBuf[512];
+};
 
 class GameFrameWork
 {
 private:
 	//네트워크
 	SOCKET		m_socket;
+	SERVER_INFO m_byteStream;
+
 
 	//클라
 	HWND		m_hWnd;

@@ -17,6 +17,7 @@ public:
 	int len;
 	int stone;
 	int roomNum;
+	int winUser=2;
 };
 
 int g_iIndex = 0;
@@ -261,12 +262,13 @@ bool ProcessPacket(SOCKET sock, USER_INFO* pUser, char* szBuf, int& len)
 		//g_mapUser[sock]->roomNum = packet.data.wX;
 		//g_mapUser[sock]->roomNum = packet.data.wY;
 
-		g_BlockManager[g_mapUser[sock]->roomNum]->setStone(packet.data.wY, packet.data.wX, (WHAT_BLOCK_STATE)g_mapUser[sock]->stone);
+		int winUser;
+		winUser = g_BlockManager[g_mapUser[sock]->roomNum]->setStone(packet.data.wY, packet.data.wX, (WHAT_BLOCK_STATE)g_mapUser[sock]->stone);
 
 		for (auto iter = g_mapUser.begin(); iter != g_mapUser.end(); iter++)
 		{
 			//if (iter->first == sock)
-				//continue;
+			//	continue;
 
 			send(iter->first, (const char*)&packet, header.wLen, 0);
 		}
