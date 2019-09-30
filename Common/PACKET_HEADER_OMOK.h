@@ -5,6 +5,7 @@
 enum PACKET_INDEX
 {
 	PACKET_INDEX_LOGIN_RET = 1,
+	PACKET_INDEX_USER_LOBBY,
 	PACKET_INDEX_USER_DATA,
 	PACKET_INDEX_SEND_POS,
 };
@@ -24,12 +25,24 @@ struct USER_DATA
 	//int roomNum;
 };
 
+struct USER_LOBBY_DATA
+{
+	int iIndex;
+
+};
 
 
 struct PACKET_LOGIN_RET
 {
 	PACKET_HEADER header;
 	int iIndex;
+};
+
+struct PACKET_USER_LOBBY
+{
+	PACKET_HEADER header;
+	WORD wCount;
+	USER_LOBBY_DATA data[20];
 };
 
 struct PACKET_USER_DATA

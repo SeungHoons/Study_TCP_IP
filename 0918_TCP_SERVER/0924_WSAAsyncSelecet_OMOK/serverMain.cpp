@@ -9,6 +9,14 @@ using namespace std;
 #define BUFSIZE 512
 #define WM_SOCKET (WM_USER+1)
 
+enum USER_STATE
+{
+	USER_IN_LOBBY,
+	USER_IN_ROOM,
+	USER_PLAYING_GAME,
+	USER_WHATCHING_GAME
+};
+
 class USER_INFO
 {
 public:
@@ -17,6 +25,7 @@ public:
 	int len;
 	int stone;
 	int roomNum;
+	USER_STATE state;
 	int winUser=2;
 };
 
@@ -165,9 +174,10 @@ void ProcessSocketMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		pInfo->index = g_iIndex++;
 		pInfo->len = 0;
 		pInfo->stone = (WHAT_BLOCK_STATE)(pInfo->index % 2);
-		//방 번호 카운트로 체크해서 늘려주기
+		//나중에 룸 번호 바꿔주기
 		pInfo->roomNum = 0;
 		g_mapUser.insert(make_pair(client_sock, pInfo));
+
 
 		PACKET_LOGIN_RET packet;
 		packet.header.wIndex = PACKET_INDEX_LOGIN_RET;
@@ -177,6 +187,39 @@ void ProcessSocketMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 		Sleep(500);
 
+		PACKET_USER_LOBBY userLobbyPacket;
+		g_mapUser[client_sock]->state = USER_IN_LOBBY;
+		userLobbyPacket.header.wIndex = PACKET_INDEX_USER_LOBBY;
+		//유저 상태
+		//userLobbyPacket.header.wLen = sizeof(PACKET_HEADER) + sizeof(WORD) + sizeof(USER_LOBBY_DATA) * g_mapUser.size();
+		//userLobbyPacket.wCount = g_mapUser.size();
+		int i = 0;
+		int tempCount = 0;
+		for (auto iter = g_mapUser.begin(); iter != g_mapUser.end(); iter++, i++)
+		{
+			if (iter->second->state == USER_IN_LOBBY)
+			{
+				userLobbyPacket.data[i].iIndex = iter->first;
+				tempCount++;
+			}
+		}
+		userLobbyPacket.header.wLen = sizeof(PACKET_HEADER) + sizeof(WORD) + sizeof(USER_LOBBY_DATA) * tempCount;
+		userLobbyPacket.wCount = tempCount;
+
+		for (auto iter = g_mapUser.begin(); iter != g_mapUser.end(); iter++, i++)
+		{
+			if (iter->second->state == USER_IN_LOBBY)
+			{
+				send(iter->first, (const char*)&userLobbyPacket, userLobbyPacket.header.wLen, 0);
+				//cout << "소켓 : " << iter->first << " 보냄" << endl;
+			}
+		}
+
+
+
+
+		////방에 입장했을때
+/*
 		PACKET_USER_DATA_H user_packet;
 		user_packet.header.wIndex = PACKET_INDEX_USER_DATA;
 		user_packet.header.wLen = sizeof(PACKET_HEADER) + sizeof(WORD) + sizeof(USER_DATA_H) * g_mapUser.size();
@@ -192,7 +235,7 @@ void ProcessSocketMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		{
 			send(iter->first, (const char*)&user_packet, user_packet.header.wLen, 0);
 		}
-
+*/
 	}
 	break;
 	case FD_READ:

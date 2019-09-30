@@ -9,6 +9,7 @@ public:
 	int x;
 	int y;
 	WHAT_BLOCK_STATE stone;
+	int sock;
 };
 class SceneManager : public singletonBase<SceneManager>
 {

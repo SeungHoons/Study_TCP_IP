@@ -3,6 +3,7 @@
 #include "MainScene.h"
 #include "ResManager.h"
 #include "BlockManager.h"
+#include "LobbyScene.h"
 
 SceneManager::SceneManager()
 {
@@ -19,12 +20,12 @@ void SceneManager::init(HDC _hdc, HWND _hWnd, SOCKET _sock)
 	m_iIndex = 0;
 	m_sock = _sock;
 
-	//m_pNowScene = new MenuScene();		//메뉴 만들면 
 	m_hWnd = _hWnd;
-	m_pNowScene = new MainScene();
+	//m_pNowScene = new MainScene();
+	m_pNowScene = new LobbyScene();
 	m_bGameEnd = false;
 	m_bSceneChage = false;
-	m_eNowSceneState = SCENE_GAME_ROOM;
+	m_eNowSceneState = SCENE_LOBBY;
 	m_pNowScene->init(_hdc, _hWnd, _sock);
 }
 
@@ -96,6 +97,34 @@ void SceneManager::ProcessPacket(char * szBuf, int len)
 		m_iIndex = packet.iIndex;
 	}
 	break;
+
+	case PACKET_INDEX_USER_LOBBY:
+	{
+		PACKET_USER_LOBBY packet;
+		memcpy(&packet, szBuf, header.wLen);
+
+		for (auto iter = m_mapPlayer.begin(); iter != m_mapPlayer.end(); iter++)
+		{
+			delete iter->second;
+		}
+		m_mapPlayer.clear();
+
+		for (int i = 0; i < packet.wCount; i++)
+		{
+			Player* pNew = new Player();
+			pNew->sock = packet.data[i].iIndex;
+			m_mapPlayer.insert(make_pair(packet.data[i].iIndex, pNew));
+		}
+
+		((LobbyScene*)m_pNowScene)->clearLobbyInfo();
+		char a[128];
+		for (int i = 0; i < m_mapPlayer.size(); i++)
+		{
+			itoa(packet.data->iIndex, a, 128);
+			((LobbyScene*)m_pNowScene)->setLobbyInfo(string(a));
+		}
+	}
+		break;
 	case PACKET_INDEX_USER_DATA:
 	{
 		PACKET_USER_DATA_H packet;

@@ -142,20 +142,20 @@ void GameFrameWork::ProcessSocketMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LP
 			retval = 0;
 		}
 
-		if (m_byteStream.len < sizeof(PACKET_HEADER))
-		{
-			//return false;
-		}
-		else
-		{
+		//if (m_byteStream.len < sizeof(PACKET_HEADER))
+		//{
+		//	//return false;
+		//}
+		//else
+		//{
 
-		}
+		//}
 
-		PACKET_HEADER header;
-		memcpy(&header, pUser->szBuf, sizeof(header));
+		//PACKET_HEADER header;
+		//memcpy(&header, pUser->szBuf, sizeof(header));
 
-		if (pUser->len < header.wLen)
-			return false;
+		//if (pUser->len < header.wLen)
+		//	return false;
 
 
 		ProcessPacket(szBuf, retval);
@@ -172,51 +172,7 @@ void GameFrameWork::ProcessPacket(char * szBuf, int len)
 	SceneManager::getSingleton()->ProcessPacket(szBuf, len);
 
 
-	memcpy(&pUser->szBuf, &pUser->szBuf[header.wLen], pUser->len - header.wLen);
-	pUser->len -= header.wLen;
+	//memcpy(&pUser->szBuf, &pUser->szBuf[header.wLen], pUser->len - header.wLen);
+	//pUser->len -= header.wLen;
 
-	//PACKET_HEADER header;
-
-	//memcpy(&header, szBuf, sizeof(header));
-
-	//switch (header.wIndex)
-	//{
-	//case PACKET_INDEX_LOGIN_RET:
-	//{
-	//	PACKET_LOGIN_RET packet;
-	//	memcpy(&packet, szBuf, header.wLen);
-
-	//	m_iIndex = packet.iIndex;
-	//}
-	//break;
-	//case PACKET_INDEX_USER_DATA:
-	//{
-	//	PACKET_USER_DATA_H packet;
-	//	memcpy(&packet, szBuf, header.wLen);
-
-	//	for (auto iter = m_mapPlayer.begin(); iter != m_mapPlayer.end(); iter++)
-	//	{
-	//		delete iter->second;
-	//	}
-	//	m_mapPlayer.clear();
-
-	//	for (int i = 0; i < packet.wCount; i++)
-	//	{
-	//		Player* pNew = new Player();
-	//		int a = packet.data[i].iIndex;
-	//		pNew->stone = (WHAT_BLOCK_STATE)packet.data[i].stone;
-	//		m_mapPlayer.insert(make_pair(packet.data[i].iIndex, pNew));
-	//	}
-	//}
-	//break;
-	//case PACKET_INDEX_SEND_POS:
-	//{
-	//	PACKET_SEND_POS packet;
-	//	memcpy(&packet, szBuf, header.wLen);
-
-	//	//m_mapPlayer[packet.data.iIndex]->x = packet.data.wX;
-	//	//m_mapPlayer[packet.data.iIndex]->y = packet.data.wY;
-	//}
-	//break;
-	//}
 }

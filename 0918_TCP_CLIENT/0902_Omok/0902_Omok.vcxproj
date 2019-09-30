@@ -147,6 +147,7 @@
     <ClCompile Include="BlockManager.cpp" />
     <ClCompile Include="GameFrame.cpp" />
     <ClCompile Include="GameFrameWork.cpp" />
+    <ClCompile Include="LobbyScene.cpp" />
     <ClCompile Include="MainScene.cpp" />
     <ClCompile Include="ResManager.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -159,6 +160,7 @@
     <ClInclude Include="BlockManager.h" />
     <ClInclude Include="GameFrameWork.h" />
     <ClInclude Include="Global.h" />
+    <ClInclude Include="LobbyScene.h" />
     <ClInclude Include="macro.h" />
     <ClInclude Include="MainScene.h" />
     <ClInclude Include="ResManager.h" />
