@@ -9,7 +9,14 @@ private:
 	RECT m_editRect;
 	HINSTANCE m_inst;
 	vector<string> m_lobbyMember;
+
+	//접속 인원 목록
 	string m_strStaticBox;
+	HWND m_lobbyListContorl;
+	//챗
+	string m_strChatingLog;
+	HWND m_lobbyChatCtrlInput;
+	HWND m_lobbyChatCtrlOutput;
 public:
 	LobbyScene();
 	~LobbyScene();
@@ -26,5 +33,8 @@ public:
 	void setLobbyInfo(string _str);
 	void clearLobbyInfo();
 	void setLobbyList();
+
+	void sendTxt(SOCKET _sock);
+	void recvTxt();
 };
 

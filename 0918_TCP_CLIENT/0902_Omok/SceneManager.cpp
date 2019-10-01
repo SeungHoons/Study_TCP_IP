@@ -120,9 +120,10 @@ void SceneManager::ProcessPacket(char * szBuf, int len)
 		char a[128];
 		for (int i = 0; i < m_mapPlayer.size(); i++)
 		{
-			itoa(packet.data->iIndex, a, 128);
+			itoa(packet.data[i].iIndex, a, 10);
 			((LobbyScene*)m_pNowScene)->setLobbyInfo(string(a));
 		}
+		((LobbyScene*)m_pNowScene)->setLobbyList();
 	}
 		break;
 	case PACKET_INDEX_USER_DATA:
