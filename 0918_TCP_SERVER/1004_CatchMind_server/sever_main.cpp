@@ -23,10 +23,10 @@ HANDLE hReadEvent, hWriteEvent;
 
 // 비동기 입출력 시작과 처리 함수
 DWORD WINAPI WorkerThread(LPVOID arg);
-void CALLBACK CompletionRoutine(
-	DWORD dwError, DWORD cbTransferred,
-	LPWSAOVERLAPPED lpOverlapped, DWORD dwFlags
-);
+//void CALLBACK CompletionRoutine(
+//	DWORD dwError, DWORD cbTransferred,
+//	LPWSAOVERLAPPED lpOverlapped, DWORD dwFlags
+//);
 // 오류 출력 함수
 void err_quit(const char *msg);
 void err_display(const char *msg);
