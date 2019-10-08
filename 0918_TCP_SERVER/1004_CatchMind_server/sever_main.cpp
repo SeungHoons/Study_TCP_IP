@@ -3,9 +3,19 @@
 #include <winsock2.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "..\..\Common/PACKET_HEADER_CatchMind.h"
 
 #define SERVERPORT 9000
 #define BUFSIZE    512
+//인구 정해놨는데 터질수도 있음
+#define MAXUSER    50
+
+//패킷의 상태
+enum IOTYPE
+{
+	IO_READ,
+	IO_WRITE
+};
 
 // 소켓 정보 저장을 위한 구조체와 변수
 struct SOCKETINFO
@@ -16,21 +26,39 @@ struct SOCKETINFO
 	int recvbytes;
 	int sendbytes;
 	WSABUF wsabuf;
+	IOTYPE iotype;
+
+	//챗
+	int MessageLen;
 };
+
+int NowUserNum = 0;
+SOCKETINFO* User[MAXUSER];
 
 SOCKET client_sock;
 HANDLE hReadEvent, hWriteEvent;
 
 // 비동기 입출력 시작과 처리 함수
 DWORD WINAPI WorkerThread(LPVOID arg);
-//void CALLBACK CompletionRoutine(
-//	DWORD dwError, DWORD cbTransferred,
-//	LPWSAOVERLAPPED lpOverlapped, DWORD dwFlags
-//);
-// 오류 출력 함수
+
+//유저 소켓 추가
+SOCKETINFO* AddSocketInfo(SOCKET _sock);
+bool RemoveSocketInfo(SOCKETINFO *_ptr);
+
+//데이터 확인
+bool CheckRecv(SOCKETINFO* _ptr);
+
+//읽기 상태
+void IO_Read(SOCKETINFO* _info, DWORD _cbTransferred);
+
+
 void err_quit(const char *msg);
 void err_display(const char *msg);
 void err_display(int errcode);
+
+DWORD recvbytes, sendbytes;
+DWORD flags = 0;
+
 
 int main(int argc, char* argv[])
 {
@@ -81,7 +109,6 @@ int main(int argc, char* argv[])
 	SOCKET client_sock;
 	SOCKADDR_IN clientaddr;
 	int addrlen;
-	DWORD recvbytes, flags;
 
 	while (1) {
 		// accept()
@@ -93,18 +120,20 @@ int main(int argc, char* argv[])
 		}
 		printf("[TCP 서버] 클라이언트 접속 : IP 접속 = %s, 포트 번호 = %d\n", inet_ntoa(clientaddr.sin_addr), ntohs(clientaddr.sin_port));
 
+		SOCKETINFO* ptr = AddSocketInfo(client_sock);
+
 		//소켓과 입출력 완료 포트 연결
 		CreateIoCompletionPort((HANDLE)client_sock, hcp, client_sock, 0);
 
 		//소켓 정보 구조체 할당
-		SOCKETINFO* ptr = new SOCKETINFO;
+		/*SOCKETINFO* ptr = new SOCKETINFO;
 		if (ptr == NULL)
 			break;
 		ZeroMemory(&ptr->overlapped, sizeof(ptr->overlapped));
 		ptr->sock = client_sock;
 		ptr->recvbytes = ptr->sendbytes = 0;
 		ptr->wsabuf.buf = ptr->buf;
-		ptr->wsabuf.len = BUFSIZE;
+		ptr->wsabuf.len = BUFSIZE;*/
 
 		//비동기 입출력 시장
 		flags = 0;
@@ -153,12 +182,29 @@ DWORD WINAPI WorkerThread(LPVOID arg)
 				DWORD temp1, temp2;
 				WSAGetOverlappedResult(ptr->sock, &ptr->overlapped, &temp1, FALSE, &temp2);
 				err_display("WsagetOverlappedResult()");
+				RemoveSocketInfo(ptr);
+				continue;
 			}
-			closesocket(ptr->sock);
-			printf("[TCP 서버] 클라이언트 종료 : IP 주소 = &s, 포트번호 =%d\n", inet_ntoa(clientaddr.sin_addr), ntohs(clientaddr.sin_port));
-			delete ptr;
+			RemoveSocketInfo(ptr);
 			continue;
+			//closesocket(ptr->sock);
+			/*printf("[TCP 서버] 클라이언트 종료 : IP 주소 = &s, 포트번호 =%d\n", inet_ntoa(clientaddr.sin_addr), ntohs(clientaddr.sin_port));
+			delete ptr;*/
+			//continue;
 		}
+
+
+		//switch (ptr->iotype)
+		//{
+		//case IO_READ:
+		//	IO_Read(ptr, cbTransferred);
+		//	break;
+		//case IO_WRITE:
+		//	break;
+		//default:
+		//	break;
+		//}
+
 
 		//데이터 전송량 갱신
 		if (ptr->recvbytes == 0)
@@ -173,6 +219,7 @@ DWORD WINAPI WorkerThread(LPVOID arg)
 		else {
 			ptr->sendbytes += cbTransferred;
 		}
+
 
 		if (ptr->recvbytes > ptr->sendbytes)
 		{
@@ -193,6 +240,7 @@ DWORD WINAPI WorkerThread(LPVOID arg)
 		}
 		else {
 			ptr->recvbytes = 0;
+			PACKET_CHAT packet;
 
 			// 데이터 받기
 			ZeroMemory(&ptr->overlapped, sizeof(ptr->overlapped));
@@ -209,9 +257,100 @@ DWORD WINAPI WorkerThread(LPVOID arg)
 				}
 				continue;
 			}
+
+			printf("%s", )
 		}
 	}
 	return 0;
+}
+
+
+SOCKETINFO* AddSocketInfo(SOCKET _sock)
+{
+	int retval;
+
+	SOCKETINFO* ptr = new SOCKETINFO;
+
+	if (ptr == NULL)
+		return false;
+	ZeroMemory(&ptr->overlapped, sizeof(ptr->overlapped));
+	ptr->sock = _sock;
+	ptr->recvbytes = ptr->sendbytes = 0;
+	ptr->wsabuf.buf = ptr->buf;
+	ptr->wsabuf.len = BUFSIZE;
+
+	User[NowUserNum++] = ptr;
+
+	return ptr;
+}
+
+bool RemoveSocketInfo(SOCKETINFO *_ptr)
+{
+	SOCKADDR_IN clientaddr;
+	int addrlen = sizeof(clientaddr);
+
+	for (int i = 0; i < NowUserNum; i++)
+	{
+		if (User[i]->sock == _ptr->sock)
+		{
+			getpeername(_ptr->sock, (SOCKADDR*)&clientaddr, &addrlen);
+			//유저가 나갓다고 클라이언트 전송
+			for (int j = 0; j < NowUserNum; j++)
+			{
+				
+			}
+
+			closesocket(_ptr->sock);
+			delete _ptr;
+			_ptr = nullptr;
+
+			for (int k = i + 1; k < NowUserNum; ++k, ++i)
+			{
+				User[i] = User[k];
+			}
+			NowUserNum--;
+			User[NowUserNum] = nullptr;
+
+			printf("[TCP 서버] 클라이언트 종료: IP 주소=%s, 포트 번호=%d\n", inet_ntoa(clientaddr.sin_addr), ntohs(clientaddr.sin_port));
+
+			return true;
+		}
+	}
+
+	return false;
+}
+
+
+//데이터 확인
+bool CheckRecv(SOCKETINFO* _ptr)
+{
+	//맨처음 총 받은 길이가 0이고 현재까지 받은 길이가 sizeof(int)보다 크거가 같을 경우
+	if (_ptr->recvbytes == 0)
+	{
+		//다 받았을 경우
+		//if(_ptr->recvbytes )
+		//if (_info->packet->Comp_Recvbytes >= sizeof(int))
+		//{
+		//	//앞에 토탈사이즈를 _info->packet->Recvbytes에 넣어준다
+		//	memcpy(&_info->packet->Recvbytes, _info->packet->RecvBuf, sizeof(int));
+		//}
+	}
+
+	return false;
+}
+
+//읽기 상태
+void IO_Read(SOCKETINFO* _info, DWORD _cbTransferred)
+{
+	//int retval;
+	//PROTOCAL protocal = PROTOCAL::NONE_USER;
+	////한 싸이클 돌았을때 들어온 _cbTransferred값을 유저가 현재까지 받은 길이에 넣어준다
+	//_info->packet->Comp_Recvbytes += _cbTransferred;
+	////모든 리시브작업이 끝났는지 체크
+	
+
+	//_info->MessageLen = _info->
+	//_info
 }
 
 // 소켓 함수 오류 출력 후 종료

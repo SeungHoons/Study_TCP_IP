@@ -141,6 +141,9 @@
   <ItemGroup>
     <ClCompile Include="sever_main.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Common\PACKET_HEADER_CatchMind.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
