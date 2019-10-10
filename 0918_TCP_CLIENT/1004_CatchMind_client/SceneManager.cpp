@@ -117,12 +117,14 @@ void SceneManager::ProcessSocketMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
 			}
 		}
 
-		if (retval > 0)
-		{
-			memcpy(&m_byteStream.szBuf[m_byteStream.len], szBuf, retval);
-			m_byteStream.len += retval;
-			retval = 0;
-		}
+
+
+		//if (retval > 0)
+		//{
+		//	memcpy(&m_byteStream.szBuf[m_byteStream.len], szBuf, retval);
+		//	m_byteStream.len += retval;
+		//	retval = 0;
+		//}
 
 		//if (m_byteStream.len < sizeof(PACKET_HEADER))
 		//{
@@ -194,27 +196,27 @@ void SceneManager::ProcessPacket(char * szBuf, int len)
 		((LobbyScene*)m_pNowScene)->setLobbyList();
 	}
 		break;
-	case PACKET_INDEX_USER_DATA:
-	{
-		PACKET_USER_DATA_H packet;
-		memcpy(&packet, szBuf, header.wLen);
+	//case PACKET_INDEX_USER_DATA:
+	//{
+	//	PACKET_USER_DATA_H packet;
+	//	memcpy(&packet, szBuf, header.wLen);
 
-		for (auto iter = m_mapPlayer.begin(); iter != m_mapPlayer.end(); iter++)
-		{
-			delete iter->second;
-		}
-		m_mapPlayer.clear();
+	//	for (auto iter = m_mapPlayer.begin(); iter != m_mapPlayer.end(); iter++)
+	//	{
+	//		delete iter->second;
+	//	}
+	//	m_mapPlayer.clear();
 
-		for (int i = 0; i < packet.wCount; i++)
-		{
-			Player* pNew = new Player();
-			int a = packet.data[i].iIndex;
-			pNew->stone = (WHAT_BLOCK_STATE)packet.data[i].stone;
-			m_mapPlayer.insert(make_pair(packet.data[i].iIndex, pNew));
+	//	for (int i = 0; i < packet.wCount; i++)
+	//	{
+	//		Player* pNew = new Player();
+	//		int a = packet.data[i].iIndex;
+	//		pNew->stone = (WHAT_BLOCK_STATE)packet.data[i].stone;
+	//		m_mapPlayer.insert(make_pair(packet.data[i].iIndex, pNew));
 
-		}
-		//((MainScene*)m_pNowScene)->getBlockMG()->setStone(m_mapPlayer[m_iIndex]->stone);
-	}
+	//	}
+	//	//((MainScene*)m_pNowScene)->getBlockMG()->setStone(m_mapPlayer[m_iIndex]->stone);
+	//}
 	break;
 	case PACKET_INDEX_SEND_POS:
 	{

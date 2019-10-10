@@ -5,6 +5,9 @@ class LobbyScene :
 	public Scene
 {
 private:
+	//네트워크
+	SOCKET m_sock;
+
 	HWND m_hWnd;
 	RECT m_editRect;
 	HINSTANCE m_inst;

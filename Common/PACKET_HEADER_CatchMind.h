@@ -65,10 +65,18 @@ struct PACKET_SEND_POS
 };
 
 
-struct PACKET_CHAT
+struct PACKET_CHAT_1
 {
 	PACKET_HEADER header;
 	int chatLen;
+	char buf[32];
 };
 
 #pragma pack()
+
+enum SCENE_STATE
+{
+	SCENE_LOGIN,
+	SCENE_LOBBY,
+	SCENE_GAME_ROOM
+};

@@ -28,6 +28,9 @@
     <ClInclude Include="Global.h" />
     <ClInclude Include="macro.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="todo.txt" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{FC998035-894E-4BC8-8C62-21693DA61EBC}</ProjectGuid>

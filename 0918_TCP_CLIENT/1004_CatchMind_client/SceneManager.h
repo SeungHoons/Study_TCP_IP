@@ -8,7 +8,6 @@ class Player
 public:
 	int x;
 	int y;
-	WHAT_BLOCK_STATE stone;
 	int sock;
 };
 

@@ -12,7 +12,7 @@ using namespace std;
 
 //my header
 #include "macro.h"
-#include "..\..\Common\PACKET_HEADER_OMOK.h"
+#include "..\..\Common\PACKET_HEADER_CatchMind.h"
 
 //define
 #define FPS 60.0f

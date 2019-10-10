@@ -148,6 +148,7 @@
     <ClCompile Include="SceneManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Common\PACKET_HEADER_CatchMind.h" />
     <ClInclude Include="BitMap.h" />
     <ClInclude Include="Global.h" />
     <ClInclude Include="LobbyScene.h" />

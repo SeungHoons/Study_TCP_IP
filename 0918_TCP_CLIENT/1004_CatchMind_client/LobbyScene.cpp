@@ -13,6 +13,7 @@ LobbyScene::~LobbyScene()
 
 void LobbyScene::init(HDC _hdc, HWND _hWnd, SOCKET _sock)
 {
+	m_sock = _sock;
 
 	m_lobbyChatCtrlInput =  CreateWindow(TEXT("edit"), NULL, WS_CHILD | WS_VISIBLE | WS_BORDER |
 		ES_AUTOHSCROLL, 100, 600, 500, 25, _hWnd, (HMENU)1, m_inst, NULL);
@@ -40,6 +41,7 @@ void LobbyScene::update()
 		}
 		else
 		{
+			sendTxt(m_sock);
 			m_strChatingLog += "\r\n";
 			m_strChatingLog += tempChar;
 			SetWindowText(m_lobbyChatCtrlInput, "");
@@ -85,4 +87,22 @@ void LobbyScene::setLobbyList()
 		m_strStaticBox += "\n";
 	}
 	SetWindowText(m_lobbyListContorl, m_strStaticBox.c_str());
+}
+
+void LobbyScene::sendTxt(SOCKET _sock)
+{
+	PACKET_CHAT_1 packetChat;
+
+	//packetChat.header.wLen = sizeof(PACKET_HEADER) + sizeof(int) + sizeof(char[512]);
+	packetChat.header.wLen = sizeof(PACKET_CHAT_1);
+	
+	GetWindowText(m_lobbyChatCtrlInput, packetChat.buf, 256);
+
+	packetChat.chatLen = strlen(packetChat.buf);
+
+	send(_sock, (const char*)&packetChat, sizeof(packetChat), 0);
+}
+
+void LobbyScene::recvTxt()
+{
 }
