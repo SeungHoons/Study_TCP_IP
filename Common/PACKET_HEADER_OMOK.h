@@ -93,18 +93,7 @@ enum SCENE_STATE
 	SCENE_GAME_ROOM
 };
 
-enum WHAT_BLOCK_STATE
-{
-	BLACK_STONE,
-	WHITE_STONE,
-	BLOCK_EMPTY
-};
 
-struct DIRECTION_XY
-{
-	int x;
-	int y;
-};
 
 
 
