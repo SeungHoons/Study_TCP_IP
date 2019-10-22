@@ -91,18 +91,56 @@ void LobbyScene::setLobbyList()
 
 void LobbyScene::sendTxt(SOCKET _sock)
 {
-	PACKET_CHAT_1 packetChat;
+	int totalsize;
+	char tempBuf[BUFSIZE];
+	char buf[BUFSIZE];
+	GetWindowText(m_lobbyChatCtrlInput, tempBuf, BUFSIZE);
 
-	//packetChat.header.wLen = sizeof(PACKET_HEADER) + sizeof(int) + sizeof(char[512]);
-	packetChat.header.wLen = sizeof(PACKET_CHAT_1);
-	
-	GetWindowText(m_lobbyChatCtrlInput, packetChat.buf, 256);
+	totalsize = sizeof(int) + sizeof(PACKET_INDEX) + sizeof(int) + strlen(tempBuf);
+	Packing(totalsize, buf, PACKET_INDEX::PACKET_INDEX_USER_CHAT, strlen(tempBuf), tempBuf);
+	send(_sock, buf, totalsize, 0);
 
-	packetChat.chatLen = strlen(packetChat.buf);
-
-	send(_sock, (const char*)&packetChat, sizeof(packetChat), 0);
+	//PACKET_CHAT_1 packetChat;
+	////packetChat.header.wLen = sizeof(PACKET_HEADER) + sizeof(int) + sizeof(char[512]);
+	//packetChat.header.wLen = sizeof(PACKET_CHAT_1);
+	//GetWindowText(m_lobbyChatCtrlInput, packetChat.buf, 256);
+	//packetChat.chatLen = strlen(packetChat.buf);
+	//send(_sock, (const char*)&packetChat, sizeof(packetChat), 0);
 }
 
 void LobbyScene::recvTxt()
 {
+}
+
+BOOL LobbyScene::Packing(int _totalsize, char* _buf, PACKET_INDEX _protocal, int _size, char* _data)
+{
+	ZeroMemory(_buf, sizeof(_buf));
+	memcpy
+	(
+		_buf,/*buf*/
+		(char*)&_totalsize,/*토탈사이즈*/
+		sizeof(int)/*토탈사이즈 크기*/
+	);
+
+	memcpy
+	(
+		_buf + sizeof(int),/*buf+sizeof(int)*/
+		(char*)&_protocal,/*프로토콜 값*/
+		sizeof(PACKET_INDEX)/*프로토콜 크기*/
+	);
+
+	memcpy
+	(
+		_buf + sizeof(int) + sizeof(PACKET_INDEX),/*buf+sizeof(int)+sizeof(PROTOCAL)*/
+		(char*)&_size,/*넣을문자길이*/
+		sizeof(int)/*문자크기*/
+	);
+
+	memcpy
+	(
+		_buf + sizeof(int) + sizeof(PACKET_INDEX) + sizeof(int),/*buf+sizeof(int)+sizeof(PROTOCAL)+sizeof(int)*/
+		_data,/*넣을 문자내용*/
+		_size/*문자길이*/
+	);
+	return true;
 }

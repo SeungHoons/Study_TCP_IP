@@ -153,52 +153,42 @@ void SceneManager::ProcessSocketMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
 
 void SceneManager::ProcessPacket(char * szBuf, int len)
 {
-	PACKET_HEADER header;
+	char buf[BUFSIZE];
+	*buf = *szBuf;
+	PACKET_INDEX protocal;
+	int size;
+	char str[BUFSIZE];
+	int totalsize;
 
-	memcpy(&header, szBuf, sizeof(header));
+	memcpy(&totalsize, szBuf, sizeof(int));
+	memcpy(&protocal, szBuf+ sizeof(int), sizeof(PACKET_INDEX));
+	memcpy(&size, szBuf + sizeof(int) + sizeof(PACKET_INDEX), sizeof(int));
+	memcpy(str, szBuf + sizeof(int) + sizeof(PACKET_INDEX) + sizeof(int), size);
 
-	switch (header.wIndex)
+	switch (protocal)
 	{
-	case PACKET_INDEX_LOGIN_RET:
-	{
-		PACKET_LOGIN_RET packet;
-		memcpy(&packet, szBuf, header.wLen);
+	case PACKET_INDEX::PACKET_INDEX_USER_CHAT:
 
-		m_iIndex = packet.iIndex;
-	}
-	break;
-
-	case PACKET_INDEX_USER_LOBBY:
-	{
-		PACKET_USER_LOBBY packet;
-		memcpy(&packet, szBuf, header.wLen);
-
-		for (auto iter = m_mapPlayer.begin(); iter != m_mapPlayer.end(); iter++)
-		{
-			delete iter->second;
-		}
-		m_mapPlayer.clear();
-
-		for (int i = 0; i < packet.wCount; i++)
-		{
-			Player* pNew = new Player();
-			pNew->sock = packet.data[i].iIndex;
-			m_mapPlayer.insert(make_pair(packet.data[i].iIndex, pNew));
-		}
-
-		((LobbyScene*)m_pNowScene)->clearLobbyInfo();
-		char a[128];
-		for (int i = 0; i < m_mapPlayer.size(); i++)
-		{
-			itoa(packet.data[i].iIndex, a, 10);
-			((LobbyScene*)m_pNowScene)->setLobbyInfo(string(a));
-		}
-		((LobbyScene*)m_pNowScene)->setLobbyList();
-	}
 		break;
-	//case PACKET_INDEX_USER_DATA:
+	}
+
+	//PACKET_HEADER header;
+	//memcpy(&header, szBuf, sizeof(header));
+
+	//switch (header.wIndex)
 	//{
-	//	PACKET_USER_DATA_H packet;
+	//case PACKET_INDEX_LOGIN_RET:
+	//{
+	//	PACKET_LOGIN_RET packet;
+	//	memcpy(&packet, szBuf, header.wLen);
+
+	//	m_iIndex = packet.iIndex;
+	//}
+	//break;
+
+	//case PACKET_INDEX_USER_LOBBY:
+	//{
+	//	PACKET_USER_LOBBY packet;
 	//	memcpy(&packet, szBuf, header.wLen);
 
 	//	for (auto iter = m_mapPlayer.begin(); iter != m_mapPlayer.end(); iter++)
@@ -210,33 +200,61 @@ void SceneManager::ProcessPacket(char * szBuf, int len)
 	//	for (int i = 0; i < packet.wCount; i++)
 	//	{
 	//		Player* pNew = new Player();
-	//		int a = packet.data[i].iIndex;
-	//		pNew->stone = (WHAT_BLOCK_STATE)packet.data[i].stone;
+	//		pNew->sock = packet.data[i].iIndex;
 	//		m_mapPlayer.insert(make_pair(packet.data[i].iIndex, pNew));
-
 	//	}
-	//	//((MainScene*)m_pNowScene)->getBlockMG()->setStone(m_mapPlayer[m_iIndex]->stone);
+
+	//	((LobbyScene*)m_pNowScene)->clearLobbyInfo();
+	//	char a[128];
+	//	for (int i = 0; i < m_mapPlayer.size(); i++)
+	//	{
+	//		itoa(packet.data[i].iIndex, a, 10);
+	//		((LobbyScene*)m_pNowScene)->setLobbyInfo(string(a));
+	//	}
+	//	((LobbyScene*)m_pNowScene)->setLobbyList();
 	//}
-	break;
-	case PACKET_INDEX_SEND_POS:
-	{
-		PACKET_SEND_POS packet;
-		memcpy(&packet, szBuf, header.wLen);
+	//	break;
+	////case PACKET_INDEX_USER_DATA:
+	////{
+	////	PACKET_USER_DATA_H packet;
+	////	memcpy(&packet, szBuf, header.wLen);
 
-		//((MainScene*)m_pNowScene)->recvPos(
-		//	packet.data.wY,
-		//	packet.data.wX,
-		//	m_mapPlayer[packet.data.iIndex]->stone
-		//	/*m_mapPlayer[packet.data.iIndex]->y,
-		//	m_mapPlayer[packet.data.iIndex]->x,
-		//	m_mapPlayer[packet.data.iIndex]->stone*/
-		//);
+	////	for (auto iter = m_mapPlayer.begin(); iter != m_mapPlayer.end(); iter++)
+	////	{
+	////		delete iter->second;
+	////	}
+	////	m_mapPlayer.clear();
 
-		//m_mapPlayer[packet.data.iIndex]->x = packet.data.wX;
-		//m_mapPlayer[packet.data.iIndex]->y = packet.data.wY;
-	}
-	break;
-	}
+	////	for (int i = 0; i < packet.wCount; i++)
+	////	{
+	////		Player* pNew = new Player();
+	////		int a = packet.data[i].iIndex;
+	////		pNew->stone = (WHAT_BLOCK_STATE)packet.data[i].stone;
+	////		m_mapPlayer.insert(make_pair(packet.data[i].iIndex, pNew));
+
+	////	}
+	////	//((MainScene*)m_pNowScene)->getBlockMG()->setStone(m_mapPlayer[m_iIndex]->stone);
+	////}
+	//break;
+	//case PACKET_INDEX_SEND_POS:
+	//{
+	//	PACKET_SEND_POS packet;
+	//	memcpy(&packet, szBuf, header.wLen);
+
+	//	//((MainScene*)m_pNowScene)->recvPos(
+	//	//	packet.data.wY,
+	//	//	packet.data.wX,
+	//	//	m_mapPlayer[packet.data.iIndex]->stone
+	//	//	/*m_mapPlayer[packet.data.iIndex]->y,
+	//	//	m_mapPlayer[packet.data.iIndex]->x,
+	//	//	m_mapPlayer[packet.data.iIndex]->stone*/
+	//	//);
+
+	//	//m_mapPlayer[packet.data.iIndex]->x = packet.data.wX;
+	//	//m_mapPlayer[packet.data.iIndex]->y = packet.data.wY;
+	//}
+	//break;
+	//}
 }
 
 void SceneManager::sendPos()

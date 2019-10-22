@@ -39,5 +39,7 @@ public:
 
 	void sendTxt(SOCKET _sock);
 	void recvTxt();
+
+	BOOL Packing(int _totalsize, char* _buf, PACKET_INDEX _protocal, int _size, char* _data);
 };
 
