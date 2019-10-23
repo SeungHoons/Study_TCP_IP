@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Struct Name="PACKET">
+    <Position X="10" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACBBAAAAAAABACAAAAAAAAAAAAAAAAAAABAAAA=</HashCode>
+      <FileName>sever_main.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="OVERLAPPEDEX">
+    <Position X="10.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAAAAAAAAAgAAAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>sever_main.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="SOCKETINFO">
+    <Position X="15.25" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIAAAAAACAAAAAAAAAAAAgACAAAAAIAAAAAA=</HashCode>
+      <FileName>sever_main.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="NEXTWORK">
+    <Position X="12.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAAAAAAAAIAAAgAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>sever_main.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="PACKET_HEADER">
+    <Position X="14" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAACA=</HashCode>
+      <FileName>C:\Users\Administrator\Desktop\MYHANS\Study_TCP_IP\Common\PACKET_HEADER_CatchMind.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="USER_DATA">
+    <Position X="4.75" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACAAgAAAAAAAAAAAQAAAABAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\Administrator\Desktop\MYHANS\Study_TCP_IP\Common\PACKET_HEADER_CatchMind.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="USER_LOBBY_DATA">
+    <Position X="13.5" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\Administrator\Desktop\MYHANS\Study_TCP_IP\Common\PACKET_HEADER_CatchMind.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="PACKET_LOGIN_RET">
+    <Position X="17" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\Administrator\Desktop\MYHANS\Study_TCP_IP\Common\PACKET_HEADER_CatchMind.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="PACKET_USER_LOBBY">
+    <Position X="3" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQAAAAAAAAAAAAAAAAAAAAAAAIAAAAQAAAAAAA=</HashCode>
+      <FileName>C:\Users\Administrator\Desktop\MYHANS\Study_TCP_IP\Common\PACKET_HEADER_CatchMind.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="PACKET_USER_DATA">
+    <Position X="8.25" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQAAAAAAAAAAAAAAAAAAAAAAAIAAAAQAAAAAAA=</HashCode>
+      <FileName>C:\Users\Administrator\Desktop\MYHANS\Study_TCP_IP\Common\PACKET_HEADER_CatchMind.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="PACKET_SEND_POS">
+    <Position X="6.5" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAA=</HashCode>
+      <FileName>C:\Users\Administrator\Desktop\MYHANS\Study_TCP_IP\Common\PACKET_HEADER_CatchMind.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="PACKET_CHAT_1">
+    <Position X="11.75" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQCAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\Administrator\Desktop\MYHANS\Study_TCP_IP\Common\PACKET_HEADER_CatchMind.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Enum Name="IOTYPE">
+    <Position X="3.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>sever_main.cpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="USER_STATE">
+    <Position X="1.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAEAAAAAAAAAAEAAAAIAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\Administrator\Desktop\MYHANS\Study_TCP_IP\Common\PACKET_HEADER_CatchMind.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="PACKET_INDEX">
+    <Position X="5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAAQAAAiAAIAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\Administrator\Desktop\MYHANS\Study_TCP_IP\Common\PACKET_HEADER_CatchMind.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="TRANSSTATE">
+    <Position X="8.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAQAAAgAAAA=</HashCode>
+      <FileName>C:\Users\Administrator\Desktop\MYHANS\Study_TCP_IP\Common\PACKET_HEADER_CatchMind.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="SCENE_STATE">
+    <Position X="6.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAIAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\Administrator\Desktop\MYHANS\Study_TCP_IP\Common\PACKET_HEADER_CatchMind.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="맑은 고딕" Size="9" />
+</ClassDiagram>
